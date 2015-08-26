@@ -1,0 +1,30 @@
+{
+  "name": "sfgain-node",
+  "version": "1.0.0",
+  "description": "Node.js version of sfgain (RSF Madagascar seismic open-source framework)",
+  "main": "do-nothing.js",
+  "dependencies": {
+    "split": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanofiorentino/sfgain-node.git"
+  },
+  "keywords": [
+    "rsf",
+    "madagascar",
+    "reproducibility",
+    "node",
+    "fiorentinoing"
+  ],
+  "author": "S. Fiorentino",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stefanofiorentino/sfgain-node/issues"
+  },
+  "homepage": "https://github.com/stefanofiorentino/sfgain-node#readme"
+}
