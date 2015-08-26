@@ -1,7 +1,8 @@
 // parser.js
 var Transform = require('stream').Transform;
-var util = require("util");
-var split = require("split");
+var util = require('util');
+var split = require('split');
+var fs = require('fs');
 
 var n1_regexp = /(?:^|\s)n1=(.*?)(?:\s|$)/g;
 var n2_regexp = /(?:^|\s)n2=(.*?)(?:\s|$)/g;
@@ -46,8 +47,12 @@ ProblemStream.prototype._transform = function (line, encoding, processed) {
       {
         var _in = values[1];
         console.log('in = '+_in);
+        fs.createReadStream(_in)
+          // Write File
+          .pipe(fs.createWriteStream(process.env.DATAPATH+'out.rsf@'));
       }  
     }
+    this.push(line+'\n');
     processed(); // we're done processing the current line
 };
 
