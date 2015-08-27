@@ -11,7 +11,37 @@ var in_regexp = /(?:^|\s)in=\"(.*?)\"(?:\s|$)/g;
 process.stdin.setEncoding("utf8"); // convert bytes to utf8 characters
 
 util.inherits(ProblemStream, Transform); // inherit Transform
+util.inherits(BinaryStream, Transform); // inherit Transform
 
+function BinaryStream () {
+  Transform.call(this, { "objectMode": false });
+  
+  this._lastChunkData = null;
+}
+
+BinaryStream.prototype._transform = function(chunk, encoding, cb){
+  var data = chunk.toString();
+  if (this._lastChunkData) data = this._lastChunkData + data;
+  
+  var len = data.length;
+  var floats_len = Math.floor(len/4);
+  var floats = [];
+  for (var i=0; i<floats_len; i+=4)
+  {
+    floats.push(data.slice(i,i+3));  
+  }
+  this._lastChunkData = data.slice(floats_len);
+  
+  floats.forEach(this.push.bind(this));
+  cb();
+}
+
+BinaryStream.prototype._flush = function(cb){
+  if (this._lastChunkData) this.push(this._lastChunkData);
+  this._lastChunkData = null;
+  cb();
+}
+  
 function ProblemStream () {
     Transform.call(this, { "objectMode": true });
 
@@ -48,7 +78,7 @@ ProblemStream.prototype._transform = function (line, encoding, processed) {
         var _in = values[1];
         console.log('in = '+_in);
         fs.createReadStream(_in)
-          // Write File
+          .pipe(new BinaryStream(4))
           .pipe(fs.createWriteStream(process.env.DATAPATH+'out.rsf@'));
       }  
     }
