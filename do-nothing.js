@@ -24,7 +24,23 @@ function BinaryStream () {
 
 BinaryStream.prototype._transform = function(chunk, encoding, cb)
 {
-  this.push(chunk);
+  var buffer; 
+  
+  if (Buffer.isBuffer(chunk))
+  {
+    buffer = chunk;
+  }
+  else
+  {
+    buffer = new Buffer(chunk, enc);
+  }
+  
+  var str;
+  for(var i=0; i<buffer.length; i+=4)
+  {
+    buffer.writeFloatLE(buffer.readFloatLE(i)*2);
+  }
+  this.push(buffer);
   cb();
 }
 
