@@ -77,8 +77,7 @@ ProblemStream.prototype._transform = function (line, encoding, processed) {
       {
         var _in = values[1];
         console.log('in = '+_in);
-        fs.createReadStream(_in)
-          .pipe(new BinaryStream(4))
+        fs.createReadStream(_in, {highWatermark: 8192})
           .pipe(fs.createWriteStream(process.env.DATAPATH+'out.rsf@'));
       }  
     }
