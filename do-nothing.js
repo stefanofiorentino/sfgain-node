@@ -29,7 +29,7 @@ BinaryStream.prototype._transform = function(chunk, encoding, cb)
   var str;
   for(var i=0; i<buffer.length; i+=4)
   {
-    buffer.writeFloatLE(buffer.readFloatLE(i)*2);
+    buffer.writeFloatLE(buffer.readFloatLE(i)*2,i);
   }
   this.push(buffer);
   cb();
