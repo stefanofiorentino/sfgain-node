@@ -4,6 +4,8 @@ var util = require('util');
 var split = require('split');
 var fs = require('fs');
 
+var DATAPATH = process.env.DATAPATH || '/var/tmp';
+
 var n1_regexp = /(?:^|\s)n1=(.*?)(?:\s|$)/g;
 var n2_regexp = /(?:^|\s)n2=(.*?)(?:\s|$)/g;
 var in_regexp = /(?:^|\s)in=\"(.*?)\"(?:\s|$)/g;
@@ -57,7 +59,7 @@ ProblemStream.prototype._transform = function (line, encoding, processed) {
       if (values !== undefined && values !== null)
       {
         var n1 = parseInt(values[1]);
-        console.log('N1 = '+n1);
+        // console.log('N1 = '+n1);
       }       
       
       // n2  
@@ -65,7 +67,7 @@ ProblemStream.prototype._transform = function (line, encoding, processed) {
       if (values !== undefined && values !== null)
       {
         var n2 = parseInt(values[1]);
-        console.log('N2 = '+n2);
+        // console.log('N2 = '+n2);
       }   
       
       // in  
@@ -73,10 +75,12 @@ ProblemStream.prototype._transform = function (line, encoding, processed) {
       if (values !== undefined && values !== null)
       {
         var _in = values[1];
-        console.log('in = '+_in);
         fs.createReadStream(_in)
           .pipe(binbuff)
-          .pipe(fs.createWriteStream(process.env.DATAPATH+'out.rsf@'));
+          .pipe(fs.createWriteStream(DATAPATH+'out.rsf@'));
+        
+        console.log('in="'+DATAPATH+'out.rsf@"');
+          
       }  
     }
     this.push(line+'\n');
